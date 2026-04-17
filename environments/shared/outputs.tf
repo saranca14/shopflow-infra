@@ -25,3 +25,7 @@ output "ecr_repository_urls" {
 output "aws_region" {
   value = var.aws_region
 }
+
+output "github_pat_secret_arn" {
+  value = aws_secretsmanager_secret.github_pat.arn
+}

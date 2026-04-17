@@ -17,3 +17,9 @@ variable "availability_zones" {
   type    = list(string)
   default = ["eu-west-1a", "eu-west-1b"]
 }
+
+variable "github_pat" {
+  description = "GitHub Personal Access Token for GitOps automation"
+  type        = string
+  sensitive   = true
+}

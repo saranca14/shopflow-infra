@@ -174,3 +174,23 @@ module "ecr" {
   project_name = var.project_name
   tags         = { Project = var.project_name, Environment = "shared" }
 }
+
+# =============================================================
+# Secrets Manager — Centralized secrets
+# =============================================================
+
+resource "aws_secretsmanager_secret" "github_pat" {
+  name        = "shopflow/github-pat"
+  description = "GitHub PAT for Tekton and ArgoCD automation"
+  tags        = { Project = var.project_name, Environment = "shared" }
+}
+
+resource "aws_secretsmanager_secret_version" "github_pat" {
+  secret_id     = aws_secretsmanager_secret.github_pat.id
+  secret_string = jsonencode({
+    username = "saranca14"
+    token    = var.github_pat
+    url      = "https://github.com/saranca14/shopflow-gitops.git"
+    type     = "git"
+  })
+}
