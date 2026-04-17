@@ -1,0 +1,40 @@
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDEs and editors
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Terraform
+.terraform/
+# State files
+*.tfstate
+*.tfstate.*
+# Application logs
+crash.log
+crash.*.log
+# Variables
+*.tfvars
+*.tfvars.json
+# Overrides
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+# CLI settings
+.terraformrc
+terraform.rc
+
+# Secrets
+*.pem
+*.key
+.env
