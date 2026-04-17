@@ -35,8 +35,8 @@ resource "aws_vpc" "shared" {
     Name        = "${var.project_name}-shared-vpc"
     Environment = "shared"
     Project     = var.project_name
-    # Tag for all 3 clusters
-    "kubernetes.io/cluster/${var.project_name}-workload"      = "shared"
+    # Tag for all 3 clusterskw
+    "kubernetes.io/cluster/${var.project_name}-app"      = "shared"
     "kubernetes.io/cluster/${var.project_name}-platform"      = "shared"
     "kubernetes.io/cluster/${var.project_name}-observability"  = "shared"
   }
@@ -59,15 +59,15 @@ resource "aws_subnet" "public" {
 
 # ---------- Private Subnets — 2 per cluster ----------
 
-resource "aws_subnet" "workload" {
+resource "aws_subnet" "app" {
   count             = length(var.availability_zones)
   vpc_id            = aws_vpc.shared.id
   cidr_block        = cidrsubnet(var.vpc_cidr, 8, 10 + count.index)
   availability_zone = var.availability_zones[count.index]
 
   tags = {
-    Name                                                       = "${var.project_name}-workload-${var.availability_zones[count.index]}"
-    "kubernetes.io/cluster/${var.project_name}-workload"       = "shared"
+    Name                                                       = "${var.project_name}-app-${var.availability_zones[count.index]}"
+    "kubernetes.io/cluster/${var.project_name}-app"       = "shared"
     "kubernetes.io/role/internal-elb"                           = "1"
   }
 }
@@ -146,10 +146,10 @@ resource "aws_route_table_association" "public" {
   route_table_id = aws_route_table.public.id
 }
 
-# Associate ALL private subnets (workload + platform + observability)
-resource "aws_route_table_association" "workload" {
+# Associate ALL private subnets (app + platform + observability)
+resource "aws_route_table_association" "app" {
   count          = length(var.availability_zones)
-  subnet_id      = aws_subnet.workload[count.index].id
+  subnet_id      = aws_subnet.app[count.index].id
   route_table_id = aws_route_table.private.id
 }
 

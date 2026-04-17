@@ -2,7 +2,7 @@ terraform {
   required_version = ">= 1.5.0"
   backend "s3" {
     bucket = "shopflow-terraform-state-122610497964"
-    key    = "workload/terraform.tfstate"
+    key    = "app/terraform.tfstate"
     region = "eu-west-1"
   }
   required_providers {
@@ -29,13 +29,13 @@ data "terraform_remote_state" "shared" {
 
 locals {
   vpc_id     = data.terraform_remote_state.shared.outputs.vpc_id
-  subnet_ids = data.terraform_remote_state.shared.outputs.workload_subnet_ids
+  subnet_ids = data.terraform_remote_state.shared.outputs.app_subnet_ids
 }
 
 module "eks" {
   source = "../../modules/eks"
 
-  cluster_name        = "${var.project_name}-workload"
+  cluster_name        = "${var.project_name}-app"
   cluster_version     = var.cluster_version
   vpc_id              = local.vpc_id
   subnet_ids          = local.subnet_ids
@@ -46,7 +46,7 @@ module "eks" {
 
   tags = {
     Project     = var.project_name
-    Environment = "workload"
-    Cluster     = "${var.project_name}-workload"
+    Environment = "app"
+    Cluster     = "${var.project_name}-app"
   }
 }

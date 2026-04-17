@@ -6,8 +6,8 @@ output "public_subnet_ids" {
   value = aws_subnet.public[*].id
 }
 
-output "workload_subnet_ids" {
-  value = aws_subnet.workload[*].id
+output "app_subnet_ids" {
+  value = aws_subnet.app[*].id
 }
 
 output "platform_subnet_ids" {

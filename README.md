@@ -8,7 +8,7 @@ Terraform infrastructure for the ShopFlow multi-cluster platform.
 
 | Cluster | Subnets | Nodes | Instance | Purpose |
 |---------|---------|-------|----------|---------|
-| **shopflow-workload** | 10.0.10.0/24, 10.0.11.0/24 | 2-4 | t3.medium | E-commerce app |
+| **shopflow-app** | 10.0.10.0/24, 10.0.11.0/24 | 2-4 | t3.medium | E-commerce app |
 | **shopflow-platform** | 10.0.12.0/24, 10.0.13.0/24 | 1-2 | t3.medium | Tekton CI + ArgoCD |
 | **shopflow-observability** | 10.0.14.0/24, 10.0.15.0/24 | 2-3 | t3.large | OTel, Jaeger, Prometheus, Grafana |
 
@@ -20,7 +20,7 @@ cd environments/shared
 terraform init && terraform apply
 
 # 2. Then each cluster (can be parallelized)
-cd ../workload
+cd ../app
 terraform init && terraform apply
 
 cd ../platform
@@ -34,7 +34,7 @@ terraform init && terraform apply
 
 ```bash
 # Switch between clusters
-aws eks update-kubeconfig --region eu-west-1 --name shopflow-workload
+aws eks update-kubeconfig --region eu-west-1 --name shopflow-app
 aws eks update-kubeconfig --region eu-west-1 --name shopflow-platform
 aws eks update-kubeconfig --region eu-west-1 --name shopflow-observability
 ```
@@ -43,7 +43,7 @@ aws eks update-kubeconfig --region eu-west-1 --name shopflow-observability
 
 ```bash
 # Reverse order: clusters first, shared last
-cd environments/workload && terraform destroy
+cd environments/app && terraform destroy
 cd ../platform && terraform destroy
 cd ../observability && terraform destroy
 cd ../shared && terraform destroy
