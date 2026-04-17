@@ -78,6 +78,11 @@ resource "aws_iam_role_policy_attachment" "ecr_power_user" {
   role       = aws_iam_role.eks_nodes.name
 }
 
+resource "aws_iam_role_policy_attachment" "ebs_csi_policy" {
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"
+  role       = aws_iam_role.eks_nodes.name
+}
+
 # ---------- EKS Node Group ----------
 
 resource "aws_eks_node_group" "main" {
@@ -108,7 +113,15 @@ resource "aws_eks_node_group" "main" {
     aws_iam_role_policy_attachment.eks_worker_node_policy,
     aws_iam_role_policy_attachment.eks_cni_policy,
     aws_iam_role_policy_attachment.ecr_power_user,
+    aws_iam_role_policy_attachment.ebs_csi_policy,
   ]
+}
+
+# ---------- EKS Addons ----------
+
+resource "aws_eks_addon" "ebs_csi" {
+  cluster_name = aws_eks_cluster.main.name
+  addon_name   = "aws-ebs-csi-driver"
 }
 
 # ---------- OIDC Provider for IRSA ----------
