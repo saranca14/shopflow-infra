@@ -6,11 +6,11 @@ terraform {
       version = "~> 5.0"
     }
   }
-  # backend "s3" {
-  #   bucket = "shopflow-terraform-state"
-  #   key    = "shared/terraform.tfstate"
-  #   region = "eu-west-1"
-  # }
+  backend "s3" {
+    bucket = "shopflow-terraform-state-122610497964"
+    key    = "shared/terraform.tfstate"
+    region = "eu-west-1"
+  }
 }
 
 provider "aws" {

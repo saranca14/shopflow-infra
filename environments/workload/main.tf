@@ -1,5 +1,10 @@
 terraform {
   required_version = ">= 1.5.0"
+  backend "s3" {
+    bucket = "shopflow-terraform-state-122610497964"
+    key    = "workload/terraform.tfstate"
+    region = "eu-west-1"
+  }
   required_providers {
     aws = {
       source  = "hashicorp/aws"
@@ -14,9 +19,11 @@ provider "aws" {
 
 # Read shared infra outputs (VPC, subnets)
 data "terraform_remote_state" "shared" {
-  backend = "local"
+  backend = "s3"
   config = {
-    path = "../shared/terraform.tfstate"
+    bucket = "shopflow-terraform-state-122610497964"
+    key    = "shared/terraform.tfstate"
+    region = "eu-west-1"
   }
 }
 
